@@ -4,8 +4,9 @@ using System.Collections;
 namespace Game
 {
     using System.Collections.Generic;
+    using UnityEngine.Networking;
 
-    public class GameManager : MonoBehaviour
+    public class GameManager : NetworkBehaviour
     {
 
         public static GameManager instance;
