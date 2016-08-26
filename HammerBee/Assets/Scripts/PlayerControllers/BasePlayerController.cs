@@ -7,6 +7,8 @@ public class BasePlayerController : MonoBehaviour
     [Header("LookVariables")]
     public float VerticalLookSpeed = 10;
     public float HorizontalLookSpeed = 10;
+    public float maxVertLookAngle = 85;
+    public float minVertLookAngle = 5;
     [Header("MovementVariables")]
     public float ForwardMovementSpeed = 10;
     [Header("Can Input")]
@@ -76,6 +78,7 @@ public class BasePlayerController : MonoBehaviour
     void VerticalLook(float _lookAxis)
     {
         playerView.transform.Rotate(_lookAxis * VerticalLookSpeed, 0, 0);
+        playerView.transform.rotation = Quaternion.Euler(Mathf.Clamp(playerView.transform.rotation.eulerAngles.x, minVertLookAngle, maxVertLookAngle), 0, 0);
     }
 
     void HorizontalLook(float _lookAxis)
@@ -88,7 +91,7 @@ public class BasePlayerController : MonoBehaviour
 
     void ForwardMovement(float _forwardSpeed)
     {
-        playerRigidBody.AddForce((transform.forward * _forwardSpeed) * ForwardMovementSpeed);
+        transform.Translate(((transform.forward * _forwardSpeed) * ForwardMovementSpeed), Space.World);
     }
 
     #endregion
