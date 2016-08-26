@@ -21,6 +21,8 @@ namespace Game
                 Destroy(gameObject);
             }
 
+            DontDestroyOnLoad(gameObject);
+
             InitGame();
         }
 
