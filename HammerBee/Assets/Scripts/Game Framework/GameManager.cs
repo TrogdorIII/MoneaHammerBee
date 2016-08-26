@@ -8,7 +8,6 @@ namespace Game
 
     public class GameManager : NetworkBehaviour
     {
-
         public static GameManager instance;
 
         void Awake()
