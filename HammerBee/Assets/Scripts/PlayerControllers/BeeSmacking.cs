@@ -10,7 +10,7 @@ public class BeeSmacking : MonoBehaviour
     public Image Reticleimage;
     private int rayLayerMask;
 
-    void Start()
+    void Awake()
     {
         rayLayerMask = 1 << 8;
         rayLayerMask = ~rayLayerMask;

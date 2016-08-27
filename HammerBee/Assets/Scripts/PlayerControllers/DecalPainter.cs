@@ -6,10 +6,16 @@ public class DecalPainter : MonoBehaviour
 {
     public GameObject decalObject;
     public float destroyTime;
+    private int rayLayerMask;
+
+    void Awake()
+    {
+        rayLayerMask = 1 << 8;
+    }
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -17,12 +23,13 @@ public class DecalPainter : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
-            Physics.Raycast(transform.position + transform.forward * 0.5f, transform.forward, out hit, 100f);
+            Physics.Raycast(transform.position + transform.forward * 0.5f, transform.forward, out hit, 100f, rayLayerMask);
             GameObject decalInstance = (GameObject)Instantiate(decalObject, hit.point + (hit.normal * 0.01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
+            decalInstance.transform.SetParent(hit.collider.gameObject.transform);
             Destroy(decalInstance, destroyTime);
-            
+
         }
-        
+
         transform.Rotate(0, Input.GetAxis("Horizontal"), 0);
     }
 
