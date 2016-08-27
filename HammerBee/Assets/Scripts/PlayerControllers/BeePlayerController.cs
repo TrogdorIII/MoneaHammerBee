@@ -10,15 +10,28 @@ public class BeePlayerController : MonoBehaviour
     public float maxVertLookAngle = 85;
     public float minVertLookAngle = 5;
     [Header("MovementVariables")]
-    public float playerMoveSpeed = 1;
+    public float forwardAcceleration = 5;
+    public float turnAcceleration = 5;
+    public float pitchAcceleration = 5;
+    public float minForwardSpeed = 5;
+    public float maxForwardSpeed = 50;
+    public float minTurnAngle = -45;
+    public float maxTurnAngle = 45;
+    public float minPitchAngle = -45;
+    public float maxPitchAngle = 45;
     [Header("Can Input")]
     public bool takeCameraInput = true;
     public bool takeMovementInput = true;
+    [Header("Debug")]
+    public float currentMovementSpeed;
+    public float currentTurnSpeed;
+    public float currentPitchSpeed;
 
     private Camera playerView;
     private Rigidbody playerRigidBody;
     private CapsuleCollider playerCollider;
 
+    private Vector3 zVelocity;
     private Vector3 moveDir = Vector3.zero;
     #endregion
 
@@ -68,12 +81,14 @@ public class BeePlayerController : MonoBehaviour
     void Update()
     {
         CameraInput();
+        PitchBee(Input.GetAxis("PitchMovement"));
+        RotateBee(Input.GetAxis("RightMovement"));
     }
 
     void CameraInput()
     {
-        VerticalLook(-Input.GetAxis("Mouse Y"));
-        HorizontalLook(Input.GetAxis("Mouse X"));
+        //VerticalLook(-Input.GetAxis("Mouse Y"));
+        //HorizontalLook(currentTurnSpeed);
     }
 
     void VerticalLook(float _lookAxis)
@@ -83,17 +98,36 @@ public class BeePlayerController : MonoBehaviour
 
     void HorizontalLook(float _lookAxis)
     {
-        transform.Rotate(0, _lookAxis * HorizontalLookSpeed, 0);
+        //playerView.transform.localEulerAngles = new Vector3(playerView.transform.localEulerAngles.x, playerView.transform.localEulerAngles.y, _lookAxis);
+        //playerView.transform.localEulerAngles = Vector3.SmoothDamp(playerView.transform.localEulerAngles, new Vector3(playerView.transform.localEulerAngles.x, playerView.transform.localEulerAngles.y, _lookAxis), ref zVelocity, 1f);
     }
 
     void FixedUpdate()
     {
-        ForwardMovement(Input.GetAxis("MoveForward"));
+        ForwardMovement(Input.GetAxis("ForwardMovement"));
     }
 
-    void ForwardMovement(float Moveplace)
+    void ForwardMovement(float forwardInput = 0)
     {
-        playerRigidBody.velocity = (transform.forward * Moveplace) * playerMoveSpeed;
+        currentMovementSpeed += forwardInput * forwardAcceleration;
+        currentMovementSpeed = Mathf.Clamp(currentMovementSpeed, minForwardSpeed, maxForwardSpeed);
+        Vector3 CalculatedMovement = Vector3.zero;
+        CalculatedMovement = (-transform.forward * (currentMovementSpeed * Time.deltaTime));
+        playerRigidBody.velocity = CalculatedMovement;
+    }
+
+    void RotateBee(float horizontalInput = 0)
+    {
+        currentTurnSpeed = horizontalInput * turnAcceleration;
+        currentTurnSpeed = Mathf.Clamp(currentTurnSpeed, minTurnAngle, maxTurnAngle);
+        transform.eulerAngles += (Vector3.up * currentTurnSpeed);
+    }
+
+    void PitchBee(float pitchInput = 0)
+    {
+        currentPitchSpeed = pitchInput * pitchAcceleration;
+        currentPitchSpeed = Mathf.Clamp(currentPitchSpeed, minPitchAngle, maxPitchAngle);
+        transform.eulerAngles += (-Vector3.right * currentPitchSpeed);
     }
 
     #region Utility
