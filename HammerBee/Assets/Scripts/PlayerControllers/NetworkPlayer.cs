@@ -5,19 +5,22 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(FirstPersonController))]
 public class NetworkPlayer : NetworkBehaviour
 {
-    FirstPersonController fpc;
+    MonoBehaviour pc;
 
     void Awake()
     {
-        fpc = GetComponent<FirstPersonController>();
+        if (GetComponent<BasePlayerController>())
+            pc = GetComponent<BasePlayerController>();
+        else
+            pc = GetComponent<BeePlayerController>();
+
     }
 
     void Start()
     {
         if (isLocalPlayer)
         {
-            //activate player controller
-            fpc.enabled = true;
+            pc.enabled = true;
         }
     }
 

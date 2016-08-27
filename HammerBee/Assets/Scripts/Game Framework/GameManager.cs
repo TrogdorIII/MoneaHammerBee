@@ -80,8 +80,22 @@ namespace Game
         }
         #endregion
 
-        #region Scoring
-
+        #region Win/Loss
+        void DecideWinner()
+        {
+            if (playerScore1.score > playerScore2.score)
+            {
+                print("Player 1 Wins");
+            }
+            else if (playerScore1.score < playerScore2.score)
+            {
+                print("Player 2 Wins");
+            }
+            else
+            {
+                print("Tie");
+            }
+        }
         #endregion
 
         void SwapPlayerPrefabs()
