@@ -21,10 +21,14 @@ public class BeeSmacking : MonoBehaviour
             RaycastHit RaycastReceive;
             if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), out RaycastReceive, RayDistance))
             {
-                Debug.Log(RaycastReceive.collider.tag);
+                Debug.Log(RaycastReceive.collider.name);
                 if (RaycastReceive.collider.GetComponent<BeePlayerController>() != null)
                 {
                     RaycastReceive.collider.GetComponent<BeePlayerController>().OnHit();
+                }
+                if (RaycastReceive.collider.GetComponent<Destructable>() != null)
+                {
+                    RaycastReceive.collider.GetComponent<Destructable>().Break();
                 }
             }
             else
