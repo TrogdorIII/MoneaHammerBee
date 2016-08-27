@@ -42,11 +42,6 @@ using Random = UnityEngine.Random;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
-        void Awake()
-        {
-            enabled = false;
-        }
-
         // Use this for initialization
         private void Start()
         {
