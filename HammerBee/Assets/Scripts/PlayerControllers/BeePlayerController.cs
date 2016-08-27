@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasePlayerController : MonoBehaviour
+public class BeePlayerController : MonoBehaviour
 {
     #region Variables
     [Header("LookVariables")]
     public float VerticalLookSpeed = 10;
     public float HorizontalLookSpeed = 10;
-    public float maxVertLookAngle = 10;
-    public float minVertLookAngle = 170;
+    public float maxVertLookAngle = 85;
+    public float minVertLookAngle = 5;
     [Header("MovementVariables")]
     public float playerMoveSpeed = 1;
     [Header("Can Input")]
     public bool takeCameraInput = true;
     public bool takeMovementInput = true;
 
-    public GameObject playerView;
+    private Camera playerView;
     private Rigidbody playerRigidBody;
     private CapsuleCollider playerCollider;
 
@@ -43,7 +43,7 @@ public class BasePlayerController : MonoBehaviour
         {
             if (transform.GetChild(i).GetComponent<Camera>())
             {
-                //playerView = transform.GetChild(i).GetComponent<Camera>();
+                playerView = transform.GetChild(i).GetComponent<Camera>();
                 break;
             }
         }
@@ -67,57 +67,34 @@ public class BasePlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerInput();
+        CameraInput();
     }
 
-    void FixedUpdate()
+    void CameraInput()
     {
-        if (takeMovementInput)
-        {
-            AllMovement(new Vector2(Input.GetAxis("ForwardMovement"), Input.GetAxis("RightMovement")));
-        }
+        VerticalLook(-Input.GetAxis("Mouse Y"));
+        HorizontalLook(Input.GetAxis("Mouse X"));
     }
 
-    void PlayerInput()
-    {
-        if (takeCameraInput)
-        {
-            VerticalLook(-Input.GetAxis("Mouse Y"));
-            HorizontalLook(Input.GetAxis("Mouse X"));
-        }
-    }
-
-    #region CameraInput
     void VerticalLook(float _lookAxis)
     {
-        Vector3 rotation = playerView.transform.localRotation.eulerAngles;
-        rotation.x += (_lookAxis * VerticalLookSpeed);
-        ///rotation.x = Mathf.Clamp(rotation.x, -80, 80);
-        playerView.transform.localRotation = Quaternion.Euler(rotation);
+        playerView.transform.Rotate(_lookAxis * VerticalLookSpeed, 0, 0);
     }
 
     void HorizontalLook(float _lookAxis)
     {
         transform.Rotate(0, _lookAxis * HorizontalLookSpeed, 0);
     }
-    #endregion
 
-    #region Movement
-
-    void AllMovement(Vector2 _forwardSpeed)
+    void FixedUpdate()
     {
-        Vector3 desiredMove = transform.forward * _forwardSpeed.x + transform.right * _forwardSpeed.y;
-        RaycastHit hitInfo;
-        Physics.SphereCast(transform.position, playerCollider.radius, Vector3.down, out hitInfo,
-                           playerCollider.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-        desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
-        moveDir.x = desiredMove.x * playerMoveSpeed;
-        moveDir.z = desiredMove.z * playerMoveSpeed;
-
-        playerRigidBody.velocity = (moveDir);
+        ForwardMovement(Input.GetAxis("MoveForward"));
     }
 
-    #endregion
+    void ForwardMovement(float Moveplace)
+    {
+        playerRigidBody.velocity = (transform.forward * Moveplace) * playerMoveSpeed;
+    }
 
     #region Utility
     public static float ClampAngle(float angle, float min, float max)
