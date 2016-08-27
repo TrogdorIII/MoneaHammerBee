@@ -48,7 +48,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Fly
       takeName: Take 001
-      firstFrame: 29.899998
+      firstFrame: 32
       lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
