@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-[RequireComponent(typeof(FirstPersonController))]
 public class NetworkPlayer : NetworkBehaviour
 {
     MonoBehaviour pc;

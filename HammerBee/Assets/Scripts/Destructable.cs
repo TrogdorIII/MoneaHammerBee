@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Game;
 
 public class Destructable : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Destructable : MonoBehaviour
 
     public void Break()
     {
+        GameManager.instance.currentScore += GameManager.instance.destructable_scoreToAdd;
+
         SelfCollider = GetComponents<Collider>();
         foreach (var item in SelfCollider)
         {

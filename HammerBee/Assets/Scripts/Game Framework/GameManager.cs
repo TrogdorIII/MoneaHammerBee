@@ -6,7 +6,7 @@ namespace Game
     using System.Collections.Generic;
     using UnityEngine.Networking;
 
-    public class GameManager : NetworkBehaviour
+    public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
 
@@ -17,6 +17,10 @@ namespace Game
         public int beeScore;
         public PlayerScore playerScore1;
         public PlayerScore playerScore2;
+
+        public float destructable_scoreToAdd;
+
+        public float currentScore;
 
         void Awake()
         {
@@ -43,12 +47,12 @@ namespace Game
             if (playerScore2.isHuman == playerScore1.isHuman)
                 playerScore2.isHuman = !playerScore1.isHuman;
 
-
+            StartRound();
         }
 
         void Start()
         {
-
+            
         }
 
         void Update()
