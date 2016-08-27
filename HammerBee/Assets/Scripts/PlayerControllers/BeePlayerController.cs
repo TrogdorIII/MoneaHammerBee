@@ -89,6 +89,11 @@ public class BeePlayerController : MonoBehaviour
     {
         PitchBee(Input.GetAxis("PitchMovement"));
         RotateBee(Input.GetAxis("RightMovement"));
+
+        if (beeLives <= 0)
+        {
+            //SEND BEE DEATH METHOD HERE
+        }
     }
 
     void FixedUpdate()
