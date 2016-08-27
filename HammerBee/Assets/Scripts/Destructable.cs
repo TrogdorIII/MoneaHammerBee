@@ -6,19 +6,24 @@ public class Destructable : MonoBehaviour
 
     public GameObject normal;
     public GameObject destroyed;
+    private Collider[] SelfCollider;
 
     public void Break()
     {
-        Debug.Log("Blah");
+        SelfCollider = GetComponents<Collider>();
+        foreach (var item in SelfCollider)
+        {
+            item.enabled = false;
+        }
         normal.SetActive(false);
         destroyed.SetActive(true);
-        //StartCoroutine("DestroySelf");
+        StartCoroutine("DestroySelf");
     }
 
 
     IEnumerator DestroySelf()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(4f);
         Destroy(gameObject);
     }
 }

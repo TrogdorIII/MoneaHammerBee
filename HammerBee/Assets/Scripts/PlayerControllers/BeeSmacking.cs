@@ -8,9 +8,12 @@ public class BeeSmacking : MonoBehaviour
     private GameObject ItemsInTrigger;
     public float RayDistance;
     public Image Reticleimage;
+    private int rayLayerMask;
 
     void Start()
     {
+        rayLayerMask = 1 << 8;
+        rayLayerMask = ~rayLayerMask;
         StartCoroutine("ReticleChanger");
     }
 
@@ -18,8 +21,8 @@ public class BeeSmacking : MonoBehaviour
     {
         if (Input.GetButtonDown("HitBee"))
         {
-            RaycastHit RaycastReceive;
-            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), out RaycastReceive, RayDistance))
+            RaycastHit RaycastReceive = new RaycastHit();
+            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), out RaycastReceive, RayDistance, rayLayerMask))
             {
                 Debug.Log(RaycastReceive.collider.name);
                 if (RaycastReceive.collider.GetComponent<BeePlayerController>() != null)
@@ -42,7 +45,7 @@ public class BeeSmacking : MonoBehaviour
     {
         while (true)
         {
-            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), RayDistance))
+            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), RayDistance, rayLayerMask))
             {
                 Reticleimage.color = Color.green;
             }
