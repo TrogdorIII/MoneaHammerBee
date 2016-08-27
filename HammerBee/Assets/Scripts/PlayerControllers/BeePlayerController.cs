@@ -22,6 +22,9 @@ public class BeePlayerController : MonoBehaviour
     [Header("Can Input")]
     public bool takeCameraInput = true;
     public bool takeMovementInput = true;
+    [Header("BeeStats")]
+    public float beeLives = 3;
+    public float invincibleTime = 3;
     [Header("Debug")]
     public float currentMovementSpeed;
     public float currentTurnSpeed;
@@ -33,8 +36,10 @@ public class BeePlayerController : MonoBehaviour
 
     private Vector3 zVelocity;
     private Vector3 moveDir = Vector3.zero;
+    private bool canBeHit;
     #endregion
 
+    #region Init
     // Use this for initialization
     void Start()
     {
@@ -47,6 +52,7 @@ public class BeePlayerController : MonoBehaviour
         GetRigidBody();
         GetPlayerCollider();
     }
+    #endregion
 
     #region GetVars
 
@@ -77,29 +83,12 @@ public class BeePlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Update Things
     // Update is called once per frame
     void Update()
     {
-        CameraInput();
         PitchBee(Input.GetAxis("PitchMovement"));
         RotateBee(Input.GetAxis("RightMovement"));
-    }
-
-    void CameraInput()
-    {
-        //VerticalLook(-Input.GetAxis("Mouse Y"));
-        //HorizontalLook(currentTurnSpeed);
-    }
-
-    void VerticalLook(float _lookAxis)
-    {
-        playerView.transform.Rotate(_lookAxis * VerticalLookSpeed, 0, 0);
-    }
-
-    void HorizontalLook(float _lookAxis)
-    {
-        //playerView.transform.localEulerAngles = new Vector3(playerView.transform.localEulerAngles.x, playerView.transform.localEulerAngles.y, _lookAxis);
-        //playerView.transform.localEulerAngles = Vector3.SmoothDamp(playerView.transform.localEulerAngles, new Vector3(playerView.transform.localEulerAngles.x, playerView.transform.localEulerAngles.y, _lookAxis), ref zVelocity, 1f);
     }
 
     void FixedUpdate()
@@ -107,6 +96,9 @@ public class BeePlayerController : MonoBehaviour
         ForwardMovement(Input.GetAxis("ForwardMovement"));
     }
 
+    #endregion
+
+    #region Movement
     void ForwardMovement(float forwardInput = 0)
     {
         currentMovementSpeed += forwardInput * forwardAcceleration;
@@ -130,6 +122,20 @@ public class BeePlayerController : MonoBehaviour
         transform.eulerAngles += (-Vector3.right * currentPitchSpeed);
     }
 
+    #endregion
+
+    #region TakeDamage
+    public void OnHit()
+    {
+        if (canBeHit)
+        {
+            beeLives -= 1;
+            canBeHit = false;
+            StartCoroutine("InvincibilityCooldown");
+        }
+    }
+    #endregion
+
     #region Utility
     public static float ClampAngle(float angle, float min, float max)
     {
@@ -140,4 +146,11 @@ public class BeePlayerController : MonoBehaviour
         return Mathf.Clamp(angle, min, max);
     }
     #endregion
+
+    IEnumerator InvincibilityCooldown()
+    {
+        yield return new WaitForSeconds(invincibleTime);
+        canBeHit = true;
+        yield break;
+    }
 }
