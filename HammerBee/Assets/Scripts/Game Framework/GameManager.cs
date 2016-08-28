@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -14,12 +15,12 @@ namespace Game
         public float roundTime;
         public float roundTimeLeft;
 
-        public int beeScore;
-        public PlayerScore playerScore1;
-        public PlayerScore playerScore2;
+        //public int beeScore;
+        //public PlayerScore playerScore1;
+        //public PlayerScore playerScore2;
 
-        public float destructable_scoreToAdd;
-
+        public float destructable_scoreToAdd = 100f;
+        public float bee_scoreToAdd = 500f;
         public float currentScore;
 
         void Awake()
@@ -42,17 +43,15 @@ namespace Game
         {
             roundTimeLeft = roundTime;
 
-            playerScore1 = new PlayerScore(0, true);
-            playerScore2 = new PlayerScore(1, false);
-            if (playerScore2.isHuman == playerScore1.isHuman)
-                playerScore2.isHuman = !playerScore1.isHuman;
-
-            StartRound();
+            //playerScore1 = new PlayerScore(0, true);
+            //playerScore2 = new PlayerScore(1, false);
+            //if (playerScore2.isHuman == playerScore1.isHuman)
+            //    playerScore2.isHuman = !playerScore1.isHuman;
         }
 
         void Start()
         {
-            
+            StartRound();
         }
 
         void Update()
@@ -60,7 +59,7 @@ namespace Game
             if (roundInProgress)
                 CountdownRoundTimer();
 
-            if (roundTimeLeft <= 0)
+            if (roundTimeLeft <= 0 && roundInProgress)
             {
                 EndRound();
             }
@@ -81,32 +80,41 @@ namespace Game
         void EndRound()
         {
             roundInProgress = false;
+            LoadScoreScreen();
         }
         #endregion
 
         #region Win/Loss
-        void DecideWinner()
+        void LoadScoreScreen()
         {
-            if (playerScore1.score > playerScore2.score)
-            {
-                print("Player 1 Wins");
-            }
-            else if (playerScore1.score < playerScore2.score)
-            {
-                print("Player 2 Wins");
-            }
-            else
-            {
-                print("Tie");
-            }
+            PlayerPrefs.SetFloat("score", currentScore);
+            SceneManager.LoadScene("ScoreScreen");
         }
+
+        //void DecideWinner()
+        //{
+        //    if (playerScore1.score > playerScore2.score)
+        //    {
+        //        print("Player 1 Wins");
+        //    }
+        //    else if (playerScore1.score < playerScore2.score)
+        //    {
+        //        print("Player 2 Wins");
+        //    }
+        //    else
+        //    {
+        //        print("Tie");
+        //    }
+        //}
         #endregion
 
-        void SwapPlayerPrefabs()
-        {
-            playerScore1.SwapPrefab();
-            playerScore2.isHuman = !playerScore1.isHuman;
-        }
+
+
+        //void SwapPlayerPrefabs()
+        //{
+        //    playerScore1.SwapPrefab();
+        //    playerScore2.isHuman = !playerScore1.isHuman;
+        //}
     }
 }
 

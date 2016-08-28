@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using XboxCtrlrInput;
-using XInputDotNetPure;
+using Game;
 
 public class BeePlayerController : MonoBehaviour
 {
@@ -89,8 +88,8 @@ public class BeePlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PitchBee(XCI.GetAxis(XboxAxis.RightStickY, 2));
-        RotateBee(XCI.GetAxis(XboxAxis.RightStickX, 2));
+        PitchBee(Input.GetAxis("PitchMovement"));
+        RotateBee(Input.GetAxis("RightMovement"));
 
         if (beeLives <= 0)
         {
@@ -100,7 +99,7 @@ public class BeePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        ForwardMovement(XCI.GetAxis(XboxAxis.LeftStickY, 2));
+        ForwardMovement(Input.GetAxis("ForwardMovement"));
     }
 
     #endregion
@@ -136,6 +135,7 @@ public class BeePlayerController : MonoBehaviour
     {
         if (canBeHit)
         {
+            GameManager.instance.currentScore += GameManager.instance.bee_scoreToAdd;
             beeLives -= 1;
             canBeHit = false;
             StartCoroutine("InvincibilityCooldown");
