@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 namespace Game
@@ -14,6 +15,7 @@ namespace Game
         public bool roundInProgress;
         public float roundTime;
         public float roundTimeLeft;
+        public Text timerText;
 
         public int beeScore;
         public PlayerScore playerScore1;
@@ -58,6 +60,7 @@ namespace Game
         {
             if (roundInProgress)
                 CountdownRoundTimer();
+            timerText.text = ("Time Left: "+Mathf.Round(roundTimeLeft));
 
             if (roundTimeLeft <= 0 && roundInProgress)
             {

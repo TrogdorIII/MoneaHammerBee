@@ -12,6 +12,8 @@ public class BeeSmacking : MonoBehaviour
     public Image Reticleimage;
     public Animator playerAnimator;
     private int rayLayerMask;
+    public AudioClip[] sounds;
+    public AudioSource source;
 
     void Awake()
     {
@@ -28,6 +30,7 @@ public class BeeSmacking : MonoBehaviour
         {
             playerAnimator.ResetTrigger("Hammer");
             playerAnimator.SetTrigger("Hammer");
+            source.PlayOneShot(sounds[0]);
             RaycastHit RaycastReceive = new RaycastHit();
             //transform.position + transform.forward * 0.5f, transform.forward
             //if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), out RaycastReceive, RayDistance, rayLayerMask))
@@ -36,6 +39,7 @@ public class BeeSmacking : MonoBehaviour
                 Debug.Log(RaycastReceive.collider.name);
                 if (RaycastReceive.collider.GetComponent<Destructable>() != null)
                 {
+                    source.PlayOneShot(sounds[1]);
                     RaycastReceive.collider.GetComponent<Destructable>().Break();
                 }
             }
