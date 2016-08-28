@@ -45,7 +45,7 @@ public class ScoreMenuManager : MonoBehaviour
 
     public void ExitToMainMenu()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("ScoreScreen");
     }
 
     public void ExitGame()

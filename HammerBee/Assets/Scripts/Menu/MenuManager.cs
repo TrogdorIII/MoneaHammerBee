@@ -44,6 +44,12 @@ public class MenuManager : MonoBehaviour {
         SceneManager.LoadScene("House");
     }
 
+    public void LoadCredits()
+    {
+        menuAudio.PlayOneShot(btnClick, 1f);
+        SceneManager.LoadScene("Credits");
+    }
+
     public void ExitGame()
     {
         menuAudio.PlayOneShot(btnClick, 1f);

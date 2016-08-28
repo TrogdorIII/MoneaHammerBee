@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using XboxCtrlrInput;
-using XInputDotNetPure;
 
 public class BeeSmacking : MonoBehaviour
 {
@@ -24,7 +22,7 @@ public class BeeSmacking : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || XCI.GetButtonDown(XboxButton.RightBumper, 1))
+        if (Input.GetMouseButtonDown(0))
         {
             playerAnimator.ResetTrigger("Hammer");
             playerAnimator.SetTrigger("Hammer");
