@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Game;
-using ExtensionMethods;
+using XboxCtrlrInput;
+using XInputDotNetPure;
 
 public class BeePlayerController : MonoBehaviour
 {
@@ -39,8 +40,6 @@ public class BeePlayerController : MonoBehaviour
     private Vector3 zVelocity;
     private Vector3 moveDir = Vector3.zero;
     private bool canBeHit;
-
-    private Material material;
     #endregion
 
     #region Init
@@ -91,8 +90,8 @@ public class BeePlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PitchBee(Input.GetAxis("PitchMovement"));
-        RotateBee(Input.GetAxis("RightMovement"));
+        PitchBee(XCI.GetAxis(XboxAxis.RightStickY, 2));
+        RotateBee(XCI.GetAxis(XboxAxis.RightStickX, 2));
 
         if (beeLives <= 0)
         {
@@ -102,7 +101,7 @@ public class BeePlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        ForwardMovement(Input.GetAxis("ForwardMovement"));
+        ForwardMovement(XCI.GetAxis(XboxAxis.LeftStickY, 2));
     }
 
     #endregion
@@ -141,7 +140,6 @@ public class BeePlayerController : MonoBehaviour
             GameManager.instance.currentScore += GameManager.instance.bee_scoreToAdd;
             beeLives -= 1;
             canBeHit = false;
-            SetAlpha(0.3f);
             StartCoroutine("InvincibilityCooldown");
         }
     }
@@ -161,13 +159,7 @@ public class BeePlayerController : MonoBehaviour
     IEnumerator InvincibilityCooldown()
     {
         yield return new WaitForSeconds(invincibleTime);
-        SetAlpha(1f);
         canBeHit = true;
         yield break;
-    }
-
-    void SetAlpha(float value)
-    {
-        material.color = material.color.WithAlpha(value);
     }
 }

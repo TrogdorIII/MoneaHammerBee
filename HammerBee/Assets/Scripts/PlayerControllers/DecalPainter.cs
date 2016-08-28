@@ -31,8 +31,6 @@ public class DecalPainter : MonoBehaviour
             }
 
         }
-
-        transform.Rotate(0, Input.GetAxis("Horizontal"), 0);
     }
 
     public float RoundBetween(float f, float min, float max)
