@@ -140,6 +140,7 @@ public class PlayerScore
     {
         this.index = index;
         this.isHuman = isHuman;
+        score = 0;
     }
 
     public void AddScore(float value)
