@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Game;
 
 public class BeePlayerController : MonoBehaviour
 {
@@ -134,6 +135,7 @@ public class BeePlayerController : MonoBehaviour
     {
         if (canBeHit)
         {
+            GameManager.instance.currentScore += GameManager.instance.bee_scoreToAdd;
             beeLives -= 1;
             canBeHit = false;
             StartCoroutine("InvincibilityCooldown");

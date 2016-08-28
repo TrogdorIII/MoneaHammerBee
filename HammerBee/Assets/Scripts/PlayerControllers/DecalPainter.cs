@@ -23,7 +23,7 @@ public class DecalPainter : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position + transform.forward * 0.5f, transform.forward, out hit, 2f))
+            if (Physics.Raycast(transform.position + transform.forward * 0.5f, transform.forward, out hit, 1.5f))
             {
                 GameObject decalInstance = (GameObject)Instantiate(decalObject, hit.point + (hit.normal * 0.01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
                 decalInstance.transform.SetParent(hit.collider.gameObject.transform);
@@ -42,6 +42,6 @@ public class DecalPainter : MonoBehaviour
 
     //void OnDrawGizmos()
     //{
-    //    Gizmos.DrawLine(transform.position + transform.forward * 0.5f, transform.position + transform.forward * 2f);
+    //    Gizmos.DrawLine(transform.position + transform.forward * 0.5f, transform.position + transform.forward * 1.5f);
     //}
 }
