@@ -1,9 +1,12 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using XboxCtrlrInput;
+using XInputDotNetPure;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
+
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
     public class RigidbodyFirstPersonController : MonoBehaviour
@@ -47,7 +50,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     CurrentTargetSpeed = ForwardSpeed;
                 }
 #if !MOBILE_INPUT
-                if (Input.GetKey(RunKey))
+                if (Input.GetKey(RunKey) || XCI.GetButtonDown(XboxButton.RightBumper, 1))
                 {
                     CurrentTargetSpeed *= RunMultiplier;
                     m_Running = true;
@@ -133,7 +136,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             RotateView();
 
-            if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
+            if ((CrossPlatformInputManager.GetButtonDown("Jump") || XCI.GetButtonDown(XboxButton.A, 1)) && !m_Jump)
             {
                 m_Jump = true;
             }
@@ -222,8 +225,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             Vector2 input = new Vector2
             {
-                x = CrossPlatformInputManager.GetAxis("Horizontal"),
-                y = CrossPlatformInputManager.GetAxis("Vertical")
+                x = XCI.GetAxis(XboxAxis.LeftStickX, 1),
+                y = XCI.GetAxis(XboxAxis.LeftStickY, 1)
             };
             movementSettings.UpdateDesiredTargetSpeed(input);
             return input;
