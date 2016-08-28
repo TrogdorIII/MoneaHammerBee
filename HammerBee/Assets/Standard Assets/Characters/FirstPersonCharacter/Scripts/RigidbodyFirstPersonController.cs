@@ -19,6 +19,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public KeyCode RunKey = KeyCode.LeftShift;
             public float JumpForce = 30f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
+            public Animator playerAnimator;
             [HideInInspector]
             public float CurrentTargetSpeed = 8f;
 
@@ -146,6 +147,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
             {
+                movementSettings.playerAnimator.SetBool("Walking?", true);
                 // always move along the camera forward as it is the direction that it being aimed at
                 Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
                 desiredMove = Vector3.ProjectOnPlane(desiredMove, m_GroundContactNormal).normalized;
@@ -158,6 +160,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 {
                     m_RigidBody.AddForce(desiredMove * SlopeMultiplier(), ForceMode.Impulse);
                 }
+            }
+            else
+            {
+                movementSettings.playerAnimator.SetBool("Walking?", false);
             }
 
             if (m_IsGrounded)
