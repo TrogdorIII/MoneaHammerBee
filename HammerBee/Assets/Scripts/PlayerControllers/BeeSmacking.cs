@@ -15,7 +15,7 @@ public class BeeSmacking : MonoBehaviour
     {
         Reticleimage = GameObject.Find("PlayerReticle").transform.GetChild(0).GetComponent<Image>();
         //Stuff
-        rayLayerMask = 1 << 8;
+        rayLayerMask = 1 << 31;
         rayLayerMask = ~rayLayerMask;
         StartCoroutine("ReticleChanger");
     }
@@ -32,10 +32,6 @@ public class BeeSmacking : MonoBehaviour
             if (Physics.Raycast(transform.position + transform.forward * 0.5f, transform.forward, out RaycastReceive, RayDistance, rayLayerMask))
             {
                 Debug.Log(RaycastReceive.collider.name);
-                if (RaycastReceive.collider.GetComponent<BeePlayerController>() != null)
-                {
-                    RaycastReceive.collider.GetComponent<BeePlayerController>().OnHit();
-                }
                 if (RaycastReceive.collider.GetComponent<Destructable>() != null)
                 {
                     RaycastReceive.collider.GetComponent<Destructable>().Break();

@@ -15,9 +15,9 @@ namespace Game
         public float roundTime;
         public float roundTimeLeft;
 
-        //public int beeScore;
-        //public PlayerScore playerScore1;
-        //public PlayerScore playerScore2;
+        public int beeScore;
+        public PlayerScore playerScore1;
+        public PlayerScore playerScore2;
 
         public float destructable_scoreToAdd = 100f;
         public float bee_scoreToAdd = 500f;
@@ -43,10 +43,10 @@ namespace Game
         {
             roundTimeLeft = roundTime;
 
-            //playerScore1 = new PlayerScore(0, true);
-            //playerScore2 = new PlayerScore(1, false);
-            //if (playerScore2.isHuman == playerScore1.isHuman)
-            //    playerScore2.isHuman = !playerScore1.isHuman;
+            playerScore1 = new PlayerScore(0, true);
+            playerScore2 = new PlayerScore(1, false);
+            if (playerScore2.isHuman == playerScore1.isHuman)
+                playerScore2.isHuman = !playerScore1.isHuman;
         }
 
         void Start()
@@ -87,7 +87,7 @@ namespace Game
         #region Win/Loss
         void LoadScoreScreen()
         {
-            PlayerPrefs.SetFloat("score", currentScore);
+            PlayerPrefs.SetFloat("score", playerScore2.score);
             SceneManager.LoadScene("ScoreScreen");
         }
 
