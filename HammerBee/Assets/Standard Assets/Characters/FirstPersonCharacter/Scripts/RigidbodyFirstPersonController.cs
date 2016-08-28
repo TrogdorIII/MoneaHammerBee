@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -20,8 +21,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float JumpForce = 30f;
             public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             public Animator playerAnimator;
+            public AudioClip[] Noises;
+            public bool walksound;
             [HideInInspector]
             public float CurrentTargetSpeed = 8f;
+            public AudioSource soundSource;
 
 #if !MOBILE_INPUT
             private bool m_Running;
@@ -125,6 +129,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
+            movementSettings.soundSource = GetComponent<AudioSource>();
             mouseLook.Init(transform, cam.transform);
         }
 
@@ -148,6 +153,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
             {
                 movementSettings.playerAnimator.SetBool("Walking?", true);
+                if (!movementSettings.walksound)
+                {
+                    StartCoroutine("WalkingNoise");
+                }
                 // always move along the camera forward as it is the direction that it being aimed at
                 Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
                 desiredMove = Vector3.ProjectOnPlane(desiredMove, m_GroundContactNormal).normalized;
@@ -164,6 +173,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             else
             {
                 movementSettings.playerAnimator.SetBool("Walking?", false);
+                StopCoroutine("WalkingNoise");
+                movementSettings.walksound = false;
             }
 
             if (m_IsGrounded)
@@ -267,6 +278,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (!m_PreviouslyGrounded && m_IsGrounded && m_Jumping)
             {
                 m_Jumping = false;
+            }
+        }
+        IEnumerator WalkingNoise()
+        {
+            while (true)
+            {
+                movementSettings.walksound = true;
+                movementSettings.soundSource.PlayOneShot(movementSettings.Noises[0]);
+                yield return new WaitForSeconds(0.3f);
             }
         }
     }
