@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ExtensionMethods;
+using XboxCtrlrInput;
+using XInputDotNetPure;
 
 public class DecalPainter : MonoBehaviour
 {
@@ -19,7 +21,7 @@ public class DecalPainter : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || XCI.GetButtonDown(XboxButton.RightBumper, 1))
         {
             RaycastHit hit;
 
@@ -28,6 +30,11 @@ public class DecalPainter : MonoBehaviour
                 GameObject decalInstance = (GameObject)Instantiate(decalObject, hit.point + (hit.normal * 0.01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
                 decalInstance.transform.SetParent(hit.collider.gameObject.transform);
                 Destroy(decalInstance, destroyTime);
+            }
+            Debug.Log(hit.collider.name);
+            if (hit.collider.GetComponent<BeePlayerController>() != null)
+            {
+                hit.collider.GetComponent<BeePlayerController>().OnHit();
             }
 
         }

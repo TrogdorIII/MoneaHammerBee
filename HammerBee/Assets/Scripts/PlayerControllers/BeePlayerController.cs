@@ -3,6 +3,7 @@ using System.Collections;
 using Game;
 using XboxCtrlrInput;
 using XInputDotNetPure;
+using ExtensionMethods;
 
 public class BeePlayerController : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class BeePlayerController : MonoBehaviour
     private Vector3 zVelocity;
     private Vector3 moveDir = Vector3.zero;
     private bool canBeHit;
+
+    public Material material;
     #endregion
 
     #region Init
@@ -47,6 +50,7 @@ public class BeePlayerController : MonoBehaviour
     void Start()
     {
         InitializeVariables();
+        
     }
 
     void InitializeVariables()
@@ -54,6 +58,8 @@ public class BeePlayerController : MonoBehaviour
         GetCameraVar();
         GetRigidBody();
         GetPlayerCollider();
+        SetAlpha(1.0f);
+        canBeHit = true;
     }
     #endregion
 
@@ -95,7 +101,7 @@ public class BeePlayerController : MonoBehaviour
 
         if (beeLives <= 0)
         {
-            //SEND BEE DEATH METHOD HERE
+            UnityEngine.SceneManagement.SceneManager.LoadScene("ScoreScreen");
         }
     }
 
@@ -135,11 +141,12 @@ public class BeePlayerController : MonoBehaviour
     #region TakeDamage
     public void OnHit()
     {
+        print("bee hit");
         if (canBeHit)
         {
-            GameManager.instance.currentScore += GameManager.instance.bee_scoreToAdd;
             beeLives -= 1;
             canBeHit = false;
+            SetAlpha(0.3f);
             StartCoroutine("InvincibilityCooldown");
         }
     }
@@ -159,7 +166,14 @@ public class BeePlayerController : MonoBehaviour
     IEnumerator InvincibilityCooldown()
     {
         yield return new WaitForSeconds(invincibleTime);
+        SetAlpha(1.0f);
         canBeHit = true;
+        print("no more invincible bee pls");
         yield break;
+    }
+
+    void SetAlpha(float value)
+    {
+        material.color = material.color.WithAlpha(value);
     }
 }

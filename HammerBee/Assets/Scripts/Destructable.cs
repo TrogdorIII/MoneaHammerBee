@@ -11,7 +11,7 @@ public class Destructable : MonoBehaviour
 
     public void Break()
     {
-        GameManager.instance.currentScore += GameManager.instance.destructable_scoreToAdd;
+        GameManager.instance.playerScore2.AddScore(GameManager.instance.destructable_scoreToAdd);
 
         SelfCollider = GetComponents<Collider>();
         foreach (var item in SelfCollider)
