@@ -8,6 +8,7 @@ public class BeeSmacking : MonoBehaviour
     private GameObject ItemsInTrigger;
     public float RayDistance;
     public Image Reticleimage;
+    public Animator playerAnimator;
     private int rayLayerMask;
 
     void Awake()
@@ -23,6 +24,8 @@ public class BeeSmacking : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            playerAnimator.ResetTrigger("Hammer");
+            playerAnimator.SetTrigger("Hammer");
             RaycastHit RaycastReceive = new RaycastHit();
             //transform.position + transform.forward * 0.5f, transform.forward
             //if (Physics.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2, 0)), (Camera.main.transform.forward), out RaycastReceive, RayDistance, rayLayerMask))
